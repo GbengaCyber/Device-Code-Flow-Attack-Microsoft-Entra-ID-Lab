@@ -122,7 +122,7 @@ While the victim authenticated normally, the attacker's tool polled the token en
 
 ---
 
-<img width="1000" height="680" alt="image" src="https://github.com/user-attachments/assets/1ff205a0-6795-44e2-a556-43f80a25d6a3" />
+<img width="800" alt="Device code list confirmation" src="https://github.com/user-attachments/assets/1ff205a0-6795-44e2-a556-43f80a25d6a3" />
 
 ---
 
