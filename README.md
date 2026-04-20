@@ -118,7 +118,7 @@ While the victim authenticated normally, the attacker's tool polled the token en
 
 ---
 
-<img width="1400" height="470" alt="image" src="https://github.com/user-attachments/assets/f60a4f94-17ae-4fcd-8fcf-40f1988d0d15" />
+<img width="1400"  alt="image" src="https://github.com/user-attachments/assets/f60a4f94-17ae-4fcd-8fcf-40f1988d0d15" />
 
 ---
 
