@@ -246,7 +246,7 @@ Three policies configured:
 <img width="800"  alt="image" src="https://github.com/user-attachments/assets/487d3aa8-7a59-47cc-aad9-104560f786de" />
 
 ---
-### Microsoft Sentinel — KQL Detection Rules
+### Microsoft Sentinel - KQL Detection Rules
 
 Four analytics rules deployed covering successful device code authentications, blocked attempts, inbox rule creation, and new MFA method registrations. 
 
@@ -344,12 +344,12 @@ This is expected when CA blocks early in the pipeline - the protocol field is ne
 | User | john smith |
 | Date | Apr 19, 2026 2:09 PM |
 | IP Address | 172.81.XXX.XXX |
-| Location | United States, Arizona |
+| Location | United States|
 | Device | PC, OS X 10, Chrome 144.0 |
 | ISP | XXX XXXX XXXXXX |
 | Matched policies | Policies matched |
 
-The attacker's machine was fingerprinted. ISP flagged as a dynamic DNS provider — consistent with attack tooling or VPN use.
+The attacker's machine was fingerprinted. ISP flagged as a dynamic DNS provider - consistent with attack tooling or VPN use.
 
 ### Account Auto-Disabled
 
@@ -394,7 +394,7 @@ SigninLogs
 
 ## Before vs After
 
-| | April 14 — No Defenses | April 19 — Defended |
+| | April 14 - No Defenses | April 19 — Defended |
 |---|---|---|
 | Token issued | ✅ Yes — full access | ❌ No — blocked |
 | Device code status | SUCCESS | EXPIRED |
@@ -402,7 +402,7 @@ SigninLogs
 | Files downloaded | Possible | Prevented |
 | Internal phishing sent | Possible | Prevented |
 | MFA method registered | Possible | Prevented |
-| Attacker IP captured | No | 172.81.XXX.XXX — Arizona, US |
+| Attacker IP captured | No | 172.81.XXX.XXX — US |
 | Sentinel alert | None | FAILURE logged |
 | Defender alert | None | Failed logon — attacker fingerprinted |
 | Account status | Active | Auto-disabled by Identity Protection |
