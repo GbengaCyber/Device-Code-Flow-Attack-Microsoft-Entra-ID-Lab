@@ -118,6 +118,11 @@ While the victim authenticated normally, the attacker's tool polled the token en
 
 <img width="1866" height="400" alt="image" src="https://github.com/user-attachments/assets/f60a4f94-17ae-4fcd-8fcf-40f1988d0d15" />
 
+---
+
+<img width="1144" height="820" alt="image" src="https://github.com/user-attachments/assets/1ff205a0-6795-44e2-a556-43f80a25d6a3" />
+
+---
 
 The attack took **2 minutes and 28 seconds** from code generation to token receipt. Status shows `SUCCESS` in green. The attacker now holds a valid `access_token` and `refresh_token` for the victim's account.
 
