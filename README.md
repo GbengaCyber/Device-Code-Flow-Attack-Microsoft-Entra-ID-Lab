@@ -109,7 +109,8 @@ Microsoft responded with user code `F2GGN3XXX` and a 15-minute window for the vi
 
 The victim was directed to `https://microsoft.com/devicelogin` and entered the code. Microsoft displays a warning telling users not to enter codes from untrusted sources — in most real-world cases this warning is ignored.
 
-<img width="1600" height="500" alt="image" src="https://github.com/user-attachments/assets/25734385-9a6d-419c-bef1-285298bc0450" />
+
+<img width="600" alt="Victim enters device code at microsoft.com/devicelogin" src="https://github.com/user-attachments/assets/25734385-9a6d-419c-bef1-285298bc0450" />
 
 ### Step 3 — Attacker Receives the Token
 
@@ -260,7 +261,7 @@ The exact same attack was repeated with all controls active. Same tool. Same cli
 The victim entered the new device code and attempted to authenticate. This time, instead of completing successfully, Microsoft returned:
 
 ---
-<img width="1110" height="788" alt="image" src="https://github.com/user-attachments/assets/dbfaca76-e068-44c7-b65f-e731c3ed983d" />
+<img width="1110" height="500" alt="image" src="https://github.com/user-attachments/assets/c588b5f3-414d-45cb-b725-23b43256b68c" />
 
 
 > *Your sign-in was successful but your admin requires the device requesting access to be managed by EagleSecureIT to access this resource.*
@@ -276,7 +277,8 @@ The victim's credentials were correct. Their MFA passed. But the token was refus
 The attacker's tool continued polling for 15 minutes. It never received a token.
 
 ---
-<img width="1906" height="423" alt="image" src="https://github.com/user-attachments/assets/98fe7e97-92fa-4fa0-923d-d0de8b38ad57" />
+
+<img width="1500" height="423" alt="image" src="https://github.com/user-attachments/assets/98fe7e97-92fa-4fa0-923d-d0de8b38ad57" />
 
 
 Phase 1 - green - `SUCCESS`. Phase 2 - red - `EXPIRED`. The attacker got nothing.
