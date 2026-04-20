@@ -1,8 +1,8 @@
-# Device Code Flow Attack — Microsoft Entra ID Lab
+# Device Code Flow Attack - Microsoft Entra ID Lab
 
 **Organization:** EaglXXXeIT  
 **Tenant:** eaglXXXeit.com  
-**Lab Date:** April 14 – April 19, 2026  
+**Lab Date:** April 14 - April 19, 2026  
 **Type:** Red Team / Blue Team Simulation
 
 ---
