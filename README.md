@@ -115,12 +115,13 @@ The victim was directed to `https://microsoft.com/devicelogin` and entered the c
 
 While the victim authenticated normally, the attacker's tool polled the token endpoint every 5 seconds. The moment the victim completed their login, Microsoft handed the token to the attacker.
 
+---
 
-<img width="1866" height="400" alt="image" src="https://github.com/user-attachments/assets/f60a4f94-17ae-4fcd-8fcf-40f1988d0d15" />
+<img width="1400" height="470" alt="image" src="https://github.com/user-attachments/assets/f60a4f94-17ae-4fcd-8fcf-40f1988d0d15" />
 
 ---
 
-<img width="1144" height="820" alt="image" src="https://github.com/user-attachments/assets/1ff205a0-6795-44e2-a556-43f80a25d6a3" />
+<img width="1000" height="680" alt="image" src="https://github.com/user-attachments/assets/1ff205a0-6795-44e2-a556-43f80a25d6a3" />
 
 ---
 
@@ -135,6 +136,7 @@ The attack took **2 minutes and 28 seconds** from code generation to token recei
 ---
 
 At this point — no alerts fired. No CA policies triggered. No Sentinel rules matched. The sign-in logs showed a normal successful authentication. The attack was completely silent.
+
 
 ### Post-Compromise Actions
 
@@ -168,7 +170,7 @@ Authorization: Bearer [STOLEN_TOKEN]
 {
   "message": {
     "subject": "Action Required: Please Review This Document",
-    "toRecipients": [{ "emailAddress": { "address": "cfo@eaglesecureit.com" } }]
+    "toRecipients": [{ "emailAddress": { "address": "cfo@eaglXXXit.com" } }]
   }
 }
 ```
@@ -192,8 +194,10 @@ Attacker's number registered as an MFA factor. Survives a password reset.
 
 ### Conditional Access Policies — 8 Policies, All Enforced
 
+
 <img width="1796" height="500" alt="image" src="https://github.com/user-attachments/assets/9c70a7ab-e009-4f27-bc80-57791d55cccc" />
 
+---
 
 | Policy | Purpose |
 |---|---|
@@ -205,6 +209,11 @@ Attacker's number registered as an MFA factor. Survives a password reset.
 | All Users — Legacy Auth Clients — Block Access | Blocks older protocols that bypass MFA |
 | Block Login From External Corporate Network | Restricts sign-ins from outside trusted IP ranges |
 | Corporate Network — MFA Required To Login | Requires MFA even inside the corporate network |
+
+---
+<img width="837" height="266" alt="image" src="https://github.com/user-attachments/assets/529e4c08-b8e4-4ec8-8f2a-6aa90cd49962" />
+
+---
 
 ### Named Locations
 
@@ -219,6 +228,7 @@ Three policies configured:
 - **Device Code Auth - Anomalous Location** — Custom activity policy alerting on native client logons from outside (Trusted Location)
 - **Impossible Travel** — Built-in anomaly detection, sensitivity High
 - **Mass Download by Single User** — Built-in detection for bulk file exfiltration, sensitivity High
+
 
 <img width="1130" height="192" alt="image" src="https://github.com/user-attachments/assets/487d3aa8-7a59-47cc-aad9-104560f786de" />
 
@@ -244,12 +254,16 @@ The exact same attack was repeated with all controls active. Same tool. Same cli
 
 The victim entered the new device code and attempted to authenticate. This time, instead of completing successfully, Microsoft returned:
 
+---
+
 <img width="478" height="289" alt="image" src="https://github.com/user-attachments/assets/5c0befe6-0cc5-494e-b9ff-d37a8da6ed6e" />
 
 
 > *Your sign-in was successful but your admin requires the device requesting access to be managed by EagleSecureIT to access this resource.*
 
 The victim's credentials were correct. Their MFA passed. But the token was refused because the device initiating the request — the attacker's unmanaged machine — was not enrolled in the tenant. The Token Protection CA policy blocked issuance at the final step.
+
+---
 
 ### What the Attacker Saw
 
@@ -298,7 +312,7 @@ This is expected when CA blocks early in the pipeline - the protocol field is ne
 ### What Defender for Cloud Apps Captured
 
 
-<img width="2266" height="660" alt="image" src="https://github.com/user-attachments/assets/d8b529e8-babe-41f0-ac3a-1d57bc49cad3" />
+<img width="1700" height="660" alt="image" src="https://github.com/user-attachments/assets/d8b529e8-babe-41f0-ac3a-1d57bc49cad3" />
 
 ---
 
