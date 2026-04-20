@@ -179,7 +179,8 @@ Attacker's number registered as an MFA factor. Survives a password reset.
 
 ### Conditional Access Policies — 8 Policies, All Enforced
 
-![All 8 Conditional Access policies — State: On](screenshots/06-ca-policies-list.png)
+<img width="1796" height="500" alt="image" src="https://github.com/user-attachments/assets/9c70a7ab-e009-4f27-bc80-57791d55cccc" />
+
 
 | Policy | Purpose |
 |---|---|
@@ -194,20 +195,27 @@ Attacker's number registered as an MFA factor. Survives a password reset.
 
 ### Named Locations
 
-![Named Locations — Corporate Network - Trusted](screenshots/07-named-locations.png)
+<img width="893" height="280" alt="image" src="https://github.com/user-attachments/assets/6da220e3-a608-466d-82c9-5ba71df632ef" />
+
 
 Trusted IP ranges defined as `Corporate Network - Trusted` and marked as a trusted location. Any authentication from outside these ranges feeds into Identity Protection risk scoring and triggers additional CA controls.
 
 ### Microsoft Defender for Cloud Apps
 
 Three policies configured:
-- **Device Code Auth - Anomalous Location** — Custom activity policy alerting on native client logons from outside Canada
+- **Device Code Auth - Anomalous Location** — Custom activity policy alerting on native client logons from outside (Trusted Location)
 - **Impossible Travel** — Built-in anomaly detection, sensitivity High
 - **Mass Download by Single User** — Built-in detection for bulk file exfiltration, sensitivity High
+
+<img width="1130" height="192" alt="image" src="https://github.com/user-attachments/assets/487d3aa8-7a59-47cc-aad9-104560f786de" />
+
 
 ### Microsoft Sentinel — KQL Detection Rules
 
 Four analytics rules deployed covering successful device code authentications, blocked attempts, inbox rule creation, and new MFA method registrations. See [`detections/sentinel-rules.kql`](detections/sentinel-rules.kql) for all queries.
+
+<img width="916" height="354" alt="image" src="https://github.com/user-attachments/assets/f5a959db-8689-4c54-9ff1-efcda9521099" />
+
 
 ### Privileged Identity Management
 
@@ -246,7 +254,8 @@ SigninLogs
 | project TimeGenerated, IPAddress, Location, ResultSignature, AppDisplayName
 ```
 
-![Sentinel KQL results — FAILURE — IP 172.81.60.237](screenshots/03-sentinel-kql-failure.png)
+![Sentinel KQL results — FAILURE — IP 172.81.60.237](<img width="1844" height="864" alt="image" src="https://github.com/user-attachments/assets/a9d520f1-5150-47f9-9ecd-347d63e4c5b7" />
+)
 
 | Field | Value |
 |---|---|
