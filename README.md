@@ -278,7 +278,7 @@ The attacker's tool continued polling for 15 minutes. It never received a token.
 
 ---
 
-<img width="1500" height="423" alt="image" src="https://github.com/user-attachments/assets/98fe7e97-92fa-4fa0-923d-d0de8b38ad57" />
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/98fe7e97-92fa-4fa0-923d-d0de8b38ad57" />
 
 
 Phase 1 - green - `SUCCESS`. Phase 2 - red - `EXPIRED`. The attacker got nothing.
@@ -294,7 +294,7 @@ SigninLogs
 ```
 
 
-<img width="1844" height="864" alt="image" src="https://github.com/user-attachments/assets/04bf1339-4295-4c10-abd4-601f9476f0b9" />
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/04bf1339-4295-4c10-abd4-601f9476f0b9" />
 
 ---
 
@@ -311,7 +311,7 @@ The attacker's IP is now a documented indicator of compromise. Location shows Un
 An enhanced query adding `AuthenticationProtocol` returned a value of `none` rather than `deviceCode`:
 
 ---
-<img width="1890" height="1122" alt="image" src="https://github.com/user-attachments/assets/2424fbd6-19f2-4bd6-91cd-2d365b096b20" />
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/2424fbd6-19f2-4bd6-91cd-2d365b096b20" />
 
 
 This is expected when CA blocks early in the pipeline - the protocol field is never populated. This led to the detection gap finding documented below.
@@ -320,7 +320,7 @@ This is expected when CA blocks early in the pipeline - the protocol field is ne
 ### What Defender for Cloud Apps Captured
 
 
-<img width="1700" height="660" alt="image" src="https://github.com/user-attachments/assets/d8b529e8-babe-41f0-ac3a-1d57bc49cad3" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/d8b529e8-babe-41f0-ac3a-1d57bc49cad3" />
 
 ---
 
@@ -342,7 +342,7 @@ The attacker's machine was fingerprinted. ISP flagged as a dynamic DNS provider 
 Identity Protection evaluated the sign-in risk and automatically disabled the johnsmith account as a response action. This was confirmed when an RDP connection to the environment returned:
 
 ---
-<img width="1112" height="790" alt="image" src="https://github.com/user-attachments/assets/3cb091ef-641b-4277-9da6-f89297988002" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/3cb091ef-641b-4277-9da6-f89297988002" />
 
 
 > *We couldn't connect to the remote PC because your account has been disabled. Error code: 0xb07*
