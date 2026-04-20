@@ -260,11 +260,12 @@ The exact same attack was repeated with all controls active. Same tool. Same cli
 The victim entered the new device code and attempted to authenticate. This time, instead of completing successfully, Microsoft returned:
 
 ---
-
-<img width="478" height="289" alt="image" src="https://github.com/user-attachments/assets/5c0befe6-0cc5-494e-b9ff-d37a8da6ed6e" />
+<img width="1110" height="788" alt="image" src="https://github.com/user-attachments/assets/dbfaca76-e068-44c7-b65f-e731c3ed983d" />
 
 
 > *Your sign-in was successful but your admin requires the device requesting access to be managed by EagleSecureIT to access this resource.*
+
+---
 
 The victim's credentials were correct. Their MFA passed. But the token was refused because the device initiating the request — the attacker's unmanaged machine — was not enrolled in the tenant. The Token Protection CA policy blocked issuance at the final step.
 
