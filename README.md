@@ -99,7 +99,7 @@ Attacker                          Victim                        Microsoft
 The victim authenticates on Microsoft's real infrastructure. The attacker collects the token from a completely separate machine. The two never interact directly.
 
 
-<img width="1000" height="470" alt="image" src="https://github.com/user-attachments/assets/ba9be557-840b-4f5b-b96b-a2777daf941c" />
+<img width="1300" height="350" alt="image" src="https://github.com/user-attachments/assets/ba9be557-840b-4f5b-b96b-a2777daf941c" />
 
 ---
 
@@ -121,7 +121,7 @@ The victim authenticates on Microsoft's real infrastructure. The attacker collec
 ### Named Locations
 Trusted IP ranges defined as "Corporate Network - Trusted" and referenced by CA policies. Sign-ins from outside these ranges are treated as higher risk and feed into Identity Protection scoring.
 
-<img width="900" height="700" alt="image" src="https://github.com/user-attachments/assets/4b236adc-1723-48f4-83d3-504c9ca2fe5a" />
+<img width="1300" height="590" alt="image" src="https://github.com/user-attachments/assets/4b236adc-1723-48f4-83d3-504c9ca2fe5a" />
 
 ### Microsoft Defender for Cloud Apps
 - **Device Code Auth - Anomalous Location** — Custom activity policy alerting on native client logons from outside Canada
