@@ -109,13 +109,15 @@ Microsoft responded with user code `F2GGN3XXX` and a 15-minute window for the vi
 
 The victim was directed to `https://microsoft.com/devicelogin` and entered the code. Microsoft displays a warning telling users not to enter codes from untrusted sources — in most real-world cases this warning is ignored.
 
-<img width="1200" height="834" alt="image" src="https://github.com/user-attachments/assets/25734385-9a6d-419c-bef1-285298bc0450" />
+<img width="1400" height="600" alt="image" src="https://github.com/user-attachments/assets/25734385-9a6d-419c-bef1-285298bc0450" />
 
 ### Step 3 — Attacker Receives the Token
 
 While the victim authenticated normally, the attacker's tool polled the token endpoint every 5 seconds. The moment the victim completed their login, Microsoft handed the token to the attacker.
 
-![Device Code List showing STATUS: SUCCESS](screenshots/02-device-code-success.png)
+
+<img width="1866" height="400" alt="image" src="https://github.com/user-attachments/assets/f60a4f94-17ae-4fcd-8fcf-40f1988d0d15" />
+
 
 The attack took **2 minutes and 28 seconds** from code generation to token receipt. Status shows `SUCCESS` in green. The attacker now holds a valid `access_token` and `refresh_token` for the victim's account.
 
