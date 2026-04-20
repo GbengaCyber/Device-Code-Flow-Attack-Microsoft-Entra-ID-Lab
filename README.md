@@ -91,6 +91,13 @@ Attacker                         Victim                        Microsoft
 
 ---
 
+
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/f489058a-08bd-4eb0-8f97-333f5a01a893" />
+
+> *Overview of attacker's infrastructure setup.*
+
+---
+
 ## Phase 1 — Attack With No Defenses (April 14, 2026)
 
 No Conditional Access policies were targeting device code flow. No Identity Protection risk policies were enforced. No Defender for Cloud Apps behavioral policies were active. The tenant was in its default state.
@@ -235,20 +242,26 @@ Three policies configured:
 - **Impossible Travel** — Built-in anomaly detection, sensitivity High
 - **Mass Download by Single User** — Built-in detection for bulk file exfiltration, sensitivity High
 
-
+---
 <img width="800"  alt="image" src="https://github.com/user-attachments/assets/487d3aa8-7a59-47cc-aad9-104560f786de" />
 
-
+---
 ### Microsoft Sentinel — KQL Detection Rules
 
-Four analytics rules deployed covering successful device code authentications, blocked attempts, inbox rule creation, and new MFA method registrations. See [`detections/sentinel-rules.kql`](detections/sentinel-rules.kql) for all queries.
+Four analytics rules deployed covering successful device code authentications, blocked attempts, inbox rule creation, and new MFA method registrations. 
+
+---
+<img width="600" alt="image" src="https://github.com/user-attachments/assets/d779e62f-2455-4dea-ab7e-cf806f10640c" />
+
+---
 
 <img width="800"  alt="image" src="https://github.com/user-attachments/assets/f5a959db-8689-4c54-9ff1-efcda9521099" />
 
+---
 
 ### Privileged Identity Management
 
-All privileged roles converted from permanent active assignment to eligible — requiring just-in-time activation with MFA and justification before admin rights become active.
+All privileged roles converted from permanent active assignment to eligible, requiring just-in-time activation with MFA and justification before admin rights become active.
 
 ---
 
@@ -261,14 +274,15 @@ The exact same attack was repeated with all controls active. Same tool. Same cli
 The victim entered the new device code and attempted to authenticate. This time, instead of completing successfully, Microsoft returned:
 
 ---
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/c588b5f3-414d-45cb-b725-23b43256b68c" />
+
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/a73df756-961b-4071-b6f9-ac950d41ff24" />
 
 
 > *Your sign-in was successful but your admin requires the device requesting access to be managed by EagleSecureIT to access this resource.*
 
 ---
 
-The victim's credentials were correct. Their MFA passed. But the token was refused because the device initiating the request — the attacker's unmanaged machine — was not enrolled in the tenant. The Token Protection CA policy blocked issuance at the final step.
+The victim's credentials were correct. Their MFA passed. But the token was refused because the device initiating the request, the attacker's unmanaged machine — was not enrolled in the tenant. The Token Protection CA policy blocked issuance at the final step.
 
 ---
 
@@ -306,7 +320,7 @@ SigninLogs
 | ResultSignature | FAILURE |
 | AppDisplayName | Microsoft Office |
 
-The attacker's IP is now a documented indicator of compromise. Location shows United States, Arizona — outside the trusted Country perimeter.
+The attacker's IP is now a documented indicator of compromise. Location shows United States, outside the trusted Country perimeter.
 
 An enhanced query adding `AuthenticationProtocol` returned a value of `none` rather than `deviceCode`:
 
@@ -355,7 +369,7 @@ The account was re-enabled by the administrator after confirming the attack was 
 
 ## Detection Gap Found and Fixed
 
-The original Sentinel rule used `where ResultType == 0` — success only. Because the CA policy blocked the Phase 2 attack before a token was issued, the result was a failure code, and no alert fired.
+The original Sentinel rule used `where ResultType == 0` success only. Because the CA policy blocked the Phase 2 attack before a token was issued, the result was a failure code, and no alert fired.
 
 This means blocked attacks were completely invisible to the SIEM. The security team would not know they were being targeted.
 
