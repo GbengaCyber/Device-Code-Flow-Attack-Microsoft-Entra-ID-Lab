@@ -17,9 +17,9 @@ This is not a theoretical exercise. Every screenshot, log entry, and alert in th
 
 ## Why Device Code Flow Matters
 
-Most people think phishing attacks need a fake login page. Device code flow phishing is different — it uses Microsoft's own legitimate login page. The victim sees no red flags. No fake site. No suspicious URL. Just a normal Microsoft sign-in prompt.
+Most people think phishing attacks need a fake login page. Device code flow phishing is different - it uses Microsoft's own legitimate login page. The victim sees no red flags. No fake site. No suspicious URL. Just a normal Microsoft sign-in prompt.
 
-The attacker never touches the victim's password. They just wait while the victim unknowingly hands them a fully valid access token. Once they have it, they have everything — email, files, Teams messages, and the ability to move laterally inside the organization.
+The attacker never touches the victim's password. They just wait while the victim unknowingly hands them a fully valid access token. Once they have it, they have everything - email, files, Teams messages, and the ability to move laterally inside the organization.
 
 What makes this particularly dangerous is that the token comes with a refresh token attached. Even if the victim changes their password the next day, the attacker's session can remain active for up to 90 days.
 
@@ -39,7 +39,7 @@ Before getting into the technical details, it is worth understanding what a succ
 | Business downtime and lost productivity | $10,000 — $50,000 per day |
 | Ransomware deployment (common follow-on) | $500,000 — $5,000,000+ |
 | Cyber insurance premium increase | 20% — 40% annual increase |
-| Reputational damage and lost clients | Unquantifiable long-term |
+| Reputational damage and lost clients |
 
 ### What an Attacker Can Do With One Stolen Token
 
@@ -57,7 +57,7 @@ Before getting into the technical details, it is worth understanding what a succ
 - If victim has admin rights — access other accounts, disable security controls, create backdoor accounts
 - Deploy ransomware or sell verified access to other threat actors
 
-The average cost of a data breach in Canada in 2024 was **$6.32 million CAD**. Device code flow attacks have been directly attributed to real-world breaches by threat actor groups including **Storm-2372**.
+The average cost of a data breach in US in 2024 was **$6.32 million USD**. Device code flow attacks have been directly attributed to real-world breaches by threat actor groups including **Storm-2372**.
 
 ---
 
@@ -120,6 +120,14 @@ While the victim authenticated normally, the attacker's tool polled the token en
 
 
 The attack took **2 minutes and 28 seconds** from code generation to token receipt. Status shows `SUCCESS` in green. The attacker now holds a valid `access_token` and `refresh_token` for the victim's account.
+
+---
+
+<img width="1756" height="500" alt="image" src="https://github.com/user-attachments/assets/a2b77721-82e1-47d0-afb0-fe1f7be790d6" />
+
+> *KQL showing attack was successful without security controls.*
+
+---
 
 At this point — no alerts fired. No CA policies triggered. No Sentinel rules matched. The sign-in logs showed a normal successful authentication. The attack was completely silent.
 
@@ -246,7 +254,7 @@ The attacker's tool continued polling for 15 minutes. It never received a token.
 <img width="1906" height="423" alt="image" src="https://github.com/user-attachments/assets/98fe7e97-92fa-4fa0-923d-d0de8b38ad57" />
 
 
-Phase 1 — green — `SUCCESS`. Phase 2 — red — `EXPIRED`. The attacker got nothing.
+Phase 1 - green - `SUCCESS`. Phase 2 - red - `EXPIRED`. The attacker got nothing.
 
 ---
 ### What Sentinel Logged
@@ -261,36 +269,43 @@ SigninLogs
 
 <img width="1844" height="864" alt="image" src="https://github.com/user-attachments/assets/04bf1339-4295-4c10-abd4-601f9476f0b9" />
 
+---
 
 | Field | Value |
 |---|---|
 | TimeGenerated | Apr 19, 2026 2:11:19 |
-| IPAddress | 172.81.60.237 |
+| IPAddress | 172.81.XX.XXX |
 | Location | US |
 | ResultSignature | FAILURE |
 | AppDisplayName | Microsoft Office |
 
-The attacker's IP is now a documented indicator of compromise. Location shows United States, Arizona — outside the trusted Canada perimeter.
+The attacker's IP is now a documented indicator of compromise. Location shows United States, Arizona — outside the trusted Country perimeter.
 
 An enhanced query adding `AuthenticationProtocol` returned a value of `none` rather than `deviceCode`:
 
-![Enhanced Sentinel query — AuthenticationProtocol: none](screenshots/04-sentinel-enhanced.png)
+---
+<img width="1890" height="1122" alt="image" src="https://github.com/user-attachments/assets/2424fbd6-19f2-4bd6-91cd-2d365b096b20" />
 
-This is expected when CA blocks early in the pipeline — the protocol field is never populated. This led to the detection gap finding documented below.
 
+This is expected when CA blocks early in the pipeline - the protocol field is never populated. This led to the detection gap finding documented below.
+
+---
 ### What Defender for Cloud Apps Captured
 
-![Defender for Cloud Apps — failed logon alert with full attacker detail](screenshots/05-defender-alert.png)
+
+<img width="2266" height="660" alt="image" src="https://github.com/user-attachments/assets/d8b529e8-babe-41f0-ac3a-1d57bc49cad3" />
+
+---
 
 | Field | Value |
 |---|---|
 | Activity | Failed log on |
 | User | john smith |
 | Date | Apr 19, 2026 2:09 PM |
-| IP Address | 172.81.60.237 |
+| IP Address | 172.81.XXX.XXX |
 | Location | United States, Arizona |
 | Device | PC, OS X 10, Chrome 144.0 |
-| ISP | dynu systems incorporated |
+| ISP | XXX XXXX XXXXXX |
 | Matched policies | Policies matched |
 
 The attacker's machine was fingerprinted. ISP flagged as a dynamic DNS provider — consistent with attack tooling or VPN use.
@@ -299,9 +314,13 @@ The attacker's machine was fingerprinted. ISP flagged as a dynamic DNS provider 
 
 Identity Protection evaluated the sign-in risk and automatically disabled the johnsmith account as a response action. This was confirmed when an RDP connection to the environment returned:
 
-![RDP connection error — account disabled — Error 0xb07](screenshots/08-account-disabled.png)
+---
+<img width="1112" height="790" alt="image" src="https://github.com/user-attachments/assets/3cb091ef-641b-4277-9da6-f89297988002" />
+
 
 > *We couldn't connect to the remote PC because your account has been disabled. Error code: 0xb07*
+
+---
 
 The account was re-enabled by the administrator after confirming the attack was contained.
 
@@ -342,7 +361,7 @@ SigninLogs
 | Files downloaded | Possible | Prevented |
 | Internal phishing sent | Possible | Prevented |
 | MFA method registered | Possible | Prevented |
-| Attacker IP captured | No | 172.81.60.237 — Arizona, US |
+| Attacker IP captured | No | 172.81.XXX.XXX — Arizona, US |
 | Sentinel alert | None | FAILURE logged |
 | Defender alert | None | Failed logon — attacker fingerprinted |
 | Account status | Active | Auto-disabled by Identity Protection |
