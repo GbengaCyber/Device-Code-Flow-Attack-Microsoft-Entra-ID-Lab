@@ -231,7 +231,8 @@ The exact same attack was repeated with all controls active. Same tool. Same cli
 
 The victim entered the new device code and attempted to authenticate. This time, instead of completing successfully, Microsoft returned:
 
-![Microsoft blocks the token — device not managed by EagleSecureIT](screenshots/01-browser-blocked.png)
+<img width="478" height="289" alt="image" src="https://github.com/user-attachments/assets/5c0befe6-0cc5-494e-b9ff-d37a8da6ed6e" />
+
 
 > *Your sign-in was successful but your admin requires the device requesting access to be managed by EagleSecureIT to access this resource.*
 
@@ -241,10 +242,13 @@ The victim's credentials were correct. Their MFA passed. But the token was refus
 
 The attacker's tool continued polling for 15 minutes. It never received a token.
 
-![Device Code List showing STATUS: EXPIRED](screenshots/02-device-code-expired.png)
+---
+<img width="1906" height="423" alt="image" src="https://github.com/user-attachments/assets/98fe7e97-92fa-4fa0-923d-d0de8b38ad57" />
+
 
 Phase 1 — green — `SUCCESS`. Phase 2 — red — `EXPIRED`. The attacker got nothing.
 
+---
 ### What Sentinel Logged
 
 ```kql
@@ -254,8 +258,9 @@ SigninLogs
 | project TimeGenerated, IPAddress, Location, ResultSignature, AppDisplayName
 ```
 
-![Sentinel KQL results — FAILURE — IP 172.81.60.237](<img width="1844" height="864" alt="image" src="https://github.com/user-attachments/assets/a9d520f1-5150-47f9-9ecd-347d63e4c5b7" />
-)
+
+<img width="1844" height="864" alt="image" src="https://github.com/user-attachments/assets/04bf1339-4295-4c10-abd4-601f9476f0b9" />
+
 
 | Field | Value |
 |---|---|
