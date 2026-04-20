@@ -109,7 +109,7 @@ Microsoft responded with user code `F2GGN3XXX` and a 15-minute window for the vi
 
 The victim was directed to `https://microsoft.com/devicelogin` and entered the code. Microsoft displays a warning telling users not to enter codes from untrusted sources — in most real-world cases this warning is ignored.
 
-<img width="1400" height="600" alt="image" src="https://github.com/user-attachments/assets/25734385-9a6d-419c-bef1-285298bc0450" />
+<img width="1600" height="500" alt="image" src="https://github.com/user-attachments/assets/25734385-9a6d-419c-bef1-285298bc0450" />
 
 ### Step 3 — Attacker Receives the Token
 
