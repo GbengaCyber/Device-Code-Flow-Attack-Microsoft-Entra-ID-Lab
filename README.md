@@ -223,8 +223,7 @@ Attacker's number registered as an MFA factor. Survives a password reset.
 | Block Login From External Corporate Network | Restricts sign-ins from outside trusted IP ranges |
 | Corporate Network — MFA Required To Login | Requires MFA even inside the corporate network |
 
----
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/529e4c08-b8e4-4ec8-8f2a-6aa90cd49962" />
+
 
 ---
 
