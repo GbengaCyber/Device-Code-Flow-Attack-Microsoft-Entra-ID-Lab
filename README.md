@@ -9,7 +9,7 @@
 
 ## What This Is
 
-This project documents a hands-on security lab where I simulated a Device Code Flow phishing attack against a real Microsoft Entra ID tenant — first with no defenses, then with a full security stack deployed. The goal was to understand how this attack works at a technical level, what the attacker sees, what the defender sees, and how to stop it.
+This project documents a hands-on security lab where I simulated a Device Code Flow phishing attack against a real Microsoft Entra ID tenant, first with no defenses, then with a full security stack deployed. The goal was to understand how this attack works at a technical level, what the attacker sees, what the defender sees, and how to stop it.
 
 This is not a theoretical exercise. Every screenshot, log entry, and alert in this repo came from a real simulation run against a live test environment.
 
@@ -17,7 +17,7 @@ This is not a theoretical exercise. Every screenshot, log entry, and alert in th
 
 ## Why Device Code Flow Matters
 
-Most people think phishing attacks need a fake login page. Device code flow phishing is different - it uses Microsoft's own legitimate login page. The victim sees no red flags. No fake site. No suspicious URL. Just a normal Microsoft sign-in prompt.
+Most people think phishing attacks need a fake login page. Device code flow phishing is different, it uses Microsoft's own legitimate login page. The victim sees no red flags. No fake site. No suspicious URL. Just a normal Microsoft sign-in prompt.
 
 The attacker never touches the victim's password. They just wait while the victim unknowingly hands them a fully valid access token. Once they have it, they have everything - email, files, Teams messages, and the ability to move laterally inside the organization.
 
@@ -65,10 +65,10 @@ The average cost of a data breach in US in 2024 was **$6.32 million USD**. Devic
 
 | Date | Activity |
 |---|---|
-| April 14, 2026 | Phase 1 — attack simulated with no defenses, token obtained |
+| April 14, 2026 | Phase 1: attack simulated with no defenses, token obtained |
 | April 14–18, 2026 | Security controls researched, planned, and deployed |
-| April 19, 2026 | Phase 2 — attack re-simulated with full defense stack active |
-| April 19, 2026 | Incident response — attacker IP logged, account auto-disabled |
+| April 19, 2026 | Phase 2: attack re-simulated with full defense stack active |
+| April 19, 2026 | Incident response - attacker IP logged, account auto-disabled |
 
 ---
 
@@ -143,7 +143,7 @@ The attack took **2 minutes and 28 seconds** from code generation to token recei
 
 ---
 
-At this point — no alerts fired. No CA policies triggered. No Sentinel rules matched. The sign-in logs showed a normal successful authentication. The attack was completely silent.
+At this point, no alerts fired. No CA policies triggered. No Sentinel rules matched. The sign-in logs showed a normal successful authentication. The attack was completely silent.
 
 ---
 
