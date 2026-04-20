@@ -98,11 +98,11 @@ Attacker                         Victim                        Microsoft
 
 ---
 
-## Phase 1 — Attack With No Defenses (April 14, 2026)
+## Phase 1: Attack With No Defenses (April 14, 2026)
 
 No Conditional Access policies were targeting device code flow. No Identity Protection risk policies were enforced. No Defender for Cloud Apps behavioral policies were active. The tenant was in its default state.
 
-### Step 1 — Attacker Requests a Device Code
+### Step 1:  Attacker Requests a Device Code
 
 ```bash
 POST https://login.microsoftonline.com/common/oauth2/v2.0/devicecode
@@ -112,14 +112,14 @@ scope     = openid profile email offline_access https://graph.microsoft.com/.def
 
 Microsoft responded with user code `F2GGN3XXX` and a 15-minute window for the victim to authenticate.
 
-### Step 2 — Victim Enters the Code
+### Step 2:  Victim Enters the Code
 
 The victim was directed to `https://microsoft.com/devicelogin` and entered the code. Microsoft displays a warning telling users not to enter codes from untrusted sources — in most real-world cases this warning is ignored.
 
 
 <img width="600" alt="Victim enters device code at microsoft.com/devicelogin" src="https://github.com/user-attachments/assets/25734385-9a6d-419c-bef1-285298bc0450" />
 
-### Step 3 — Attacker Receives the Token
+### Step 3: Attacker Receives the Token
 
 While the victim authenticated normally, the attacker's tool polled the token endpoint every 5 seconds. The moment the victim completed their login, Microsoft handed the token to the attacker.
 
