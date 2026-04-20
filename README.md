@@ -118,7 +118,7 @@ While the victim authenticated normally, the attacker's tool polled the token en
 
 ---
 
-<img width="1400"  alt="image" src="https://github.com/user-attachments/assets/f60a4f94-17ae-4fcd-8fcf-40f1988d0d15" />
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/f60a4f94-17ae-4fcd-8fcf-40f1988d0d15" />
 
 ---
 
@@ -130,7 +130,7 @@ The attack took **2 minutes and 28 seconds** from code generation to token recei
 
 ---
 
-<img width="1756" height="500" alt="image" src="https://github.com/user-attachments/assets/a2b77721-82e1-47d0-afb0-fe1f7be790d6" />
+<img width="1756"  alt="image" src="https://github.com/user-attachments/assets/a2b77721-82e1-47d0-afb0-fe1f7be790d6" />
 
 > *KQL showing attack was successful without security controls.*
 
@@ -201,7 +201,7 @@ Attacker's number registered as an MFA factor. Survives a password reset.
 ### Conditional Access Policies — 8 Policies, All Enforced
 
 
-<img width="1796" height="500" alt="image" src="https://github.com/user-attachments/assets/9c70a7ab-e009-4f27-bc80-57791d55cccc" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/9c70a7ab-e009-4f27-bc80-57791d55cccc" />
 
 ---
 
@@ -217,13 +217,13 @@ Attacker's number registered as an MFA factor. Survives a password reset.
 | Corporate Network — MFA Required To Login | Requires MFA even inside the corporate network |
 
 ---
-<img width="837" height="266" alt="image" src="https://github.com/user-attachments/assets/529e4c08-b8e4-4ec8-8f2a-6aa90cd49962" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/529e4c08-b8e4-4ec8-8f2a-6aa90cd49962" />
 
 ---
 
 ### Named Locations
 
-<img width="893" height="280" alt="image" src="https://github.com/user-attachments/assets/6da220e3-a608-466d-82c9-5ba71df632ef" />
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/6da220e3-a608-466d-82c9-5ba71df632ef" />
 
 
 Trusted IP ranges defined as `Corporate Network - Trusted` and marked as a trusted location. Any authentication from outside these ranges feeds into Identity Protection risk scoring and triggers additional CA controls.
@@ -236,14 +236,14 @@ Three policies configured:
 - **Mass Download by Single User** — Built-in detection for bulk file exfiltration, sensitivity High
 
 
-<img width="1130" height="192" alt="image" src="https://github.com/user-attachments/assets/487d3aa8-7a59-47cc-aad9-104560f786de" />
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/487d3aa8-7a59-47cc-aad9-104560f786de" />
 
 
 ### Microsoft Sentinel — KQL Detection Rules
 
 Four analytics rules deployed covering successful device code authentications, blocked attempts, inbox rule creation, and new MFA method registrations. See [`detections/sentinel-rules.kql`](detections/sentinel-rules.kql) for all queries.
 
-<img width="916" height="354" alt="image" src="https://github.com/user-attachments/assets/f5a959db-8689-4c54-9ff1-efcda9521099" />
+<img width="800"  alt="image" src="https://github.com/user-attachments/assets/f5a959db-8689-4c54-9ff1-efcda9521099" />
 
 
 ### Privileged Identity Management
@@ -261,7 +261,7 @@ The exact same attack was repeated with all controls active. Same tool. Same cli
 The victim entered the new device code and attempted to authenticate. This time, instead of completing successfully, Microsoft returned:
 
 ---
-<img width="1110" height="500" alt="image" src="https://github.com/user-attachments/assets/c588b5f3-414d-45cb-b725-23b43256b68c" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/c588b5f3-414d-45cb-b725-23b43256b68c" />
 
 
 > *Your sign-in was successful but your admin requires the device requesting access to be managed by EagleSecureIT to access this resource.*
